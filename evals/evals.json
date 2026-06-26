@@ -1,0 +1,61 @@
+{
+  "skill_name": "playwright-trace-analysis",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "帮我排查这个 Playwright 测试用例为什么失败：/private/tmp/tv/cfc18c86d4584eea920ad5a312a232b8.zip",
+      "expected_output": "报告应识别出：1) 失败操作是 Page.waitForEventInfo（waitForNavigation）超时；2) 根因是点击 Confirm Order 后页面跳转到 /pending?redirect=.../list 中间页，测试等待的 list URL 从未直接出现；3) 给出等待 pending 中间页再等 list 页的修复建议",
+      "assertions": [
+        {
+          "id": "identifies_failed_action",
+          "text": "报告中识别出失败操作涉及 waitForNavigation 或 waitForEventInfo 或 waitForURL",
+          "type": "contains_concept"
+        },
+        {
+          "id": "identifies_pending_redirect",
+          "text": "报告提到页面跳转到了 /pending 中间页（URL 含 pending 或 redirect）",
+          "type": "contains_concept"
+        },
+        {
+          "id": "fix_suggestion_handles_pending",
+          "text": "修复建议中提到需要处理 pending 中间页，或增大超时",
+          "type": "contains_concept"
+        },
+        {
+          "id": "has_timeline",
+          "text": "报告中包含时间线或关键操作序列",
+          "type": "contains_concept"
+        }
+      ],
+      "files": ["/private/tmp/tv/cfc18c86d4584eea920ad5a312a232b8.zip"]
+    },
+    {
+      "id": 1,
+      "prompt": "这个测试 trace 里发生了什么错误？请帮我分析原因并给出修复方案。\nhttps://bianque-rustfs.hzk8s.com/traceviewer/83c910adc05d46c5b3254df171544ad0.zip",
+      "expected_output": "报告应识别出：1) 失败操作是 waitForSelector('.zen-design-listEmpty, .zen-design-table') 超时；2) 根因是 React 应用全屏 loading-pane 未消失（整个 JS 堆栈执行了约 29 秒）；3) 截图显示页面白屏或 loading spinner；4) 给出等 loading-pane 消失后再等表格的修复建议",
+      "assertions": [
+        {
+          "id": "identifies_waitforselector_timeout",
+          "text": "报告中识别出 waitForSelector 超时，且涉及 zen-design-table 或 zen-design-listEmpty",
+          "type": "contains_concept"
+        },
+        {
+          "id": "identifies_loading_pane",
+          "text": "报告提到应用级 loading 层（loading-pane 或全屏 spinner）是页面卡住的原因",
+          "type": "contains_concept"
+        },
+        {
+          "id": "identifies_slow_js",
+          "text": "报告提到 JS 执行慢、网络慢、或截图显示长时间空白期",
+          "type": "contains_concept"
+        },
+        {
+          "id": "fix_suggestion_waits_for_loading",
+          "text": "修复建议中提到等 loading-pane 消失（HIDDEN 状态）或增大超时时间",
+          "type": "contains_concept"
+        }
+      ],
+      "files": []
+    }
+  ]
+}
